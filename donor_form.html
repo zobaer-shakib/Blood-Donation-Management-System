@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodLink - Become a Donor / Edit Donor Profile</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for consistency and aesthetics, complementing Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe3e3 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(45deg, #ef4444, #b91c1c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(239, 68, 68, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #ef4444, #dc2626);
+            color: white !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #dc2626, #b91c1c);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+        .btn-secondary {
+            background: linear-gradient(45deg, #fee2e2, #fecaca);
+            color: #991b1b !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid #fecaca;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);
+        }
+        .btn-secondary:hover {
+            background: linear-gradient(45deg, #fecaca, #fca5a5);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.2);
+        }
+        header {
+            background: linear-gradient(to right, #fff5f5, #fee2e2) !important;
+            border-bottom: 3px solid #ef4444;
+        }
+        .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .nav-link:hover {
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+        .nav-link.active {
+            background-color: #ef4444;
+            color: #ffffff;
+        }
+        .nav-link.active:hover {
+            background-color: #dc2626;
+            color: #ffffff;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+        footer {
+            background: linear-gradient(to right, #991b1b, #7f1d1d) !important;
+        }
+        .message-box {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 500;
+        }
+        .message-box.success {
+            background-color: #d1fae5; /* green-100 */
+            color: #065f46; /* green-800 */
+            border: 1px solid #34d399; /* green-400 */
+        }
+        .message-box.error {
+            background-color: #fee2e2; /* red-100 */
+            color: #991b1b; /* red-800 */
+            border: 1px solid #ef4444; /* red-500 */
+        }
+        .message-box.info {
+            background-color: #e0f2fe; /* blue-100 */
+            color: #1e40af; /* blue-800 */
+            border: 1px solid #60a5fa; /* blue-400 */
+        }
+        .message-box.warning {
+            background-color: #fffbeb; /* yellow-100 */
+            color: #92400e; /* yellow-800 */
+            border: 1px solid #fcd34d; /* yellow-400 */
+        }
+        .form-group {
+            margin-bottom: 1.25rem; /* mb-5 */
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+            color: #374151; /* text-gray-700 */
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"],
+        .form-group input[type="number"],
+        .form-group input[type="tel"],
+        .form-group input[type="date"],
+        .form-group select,
+        .form-group textarea {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem; /* px-4 py-3 */
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.5rem; /* rounded-lg */
+            font-size: 1rem; /* text-base */
+            color: #374151; /* text-gray-700 */
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-white shadow-md py-4">
+        <div class="container flex flex-col md:flex-row justify-between items-center">
+            <h1 class="text-3xl font-bold text-red-600 mb-4 md:mb-0">BloodLink</h1>
+            <nav class="flex flex-wrap gap-2 md:gap-4 text-gray-700 font-medium">
+                <a href="index.html" class="nav-link logged-out-only">Home</a>
+                <a href="index.html" class="nav-link logged-out-only hidden">Login</a>
+                <a href="user_profile.html" class="nav-link logged-in-only">My Profile</a>
+                <a href="request_form.html" class="nav-link logged-in-only">Request Blood</a>
+                <a href="search_donors.html" class="nav-link logged-in-only">Find Donors</a>
+                <a href="find_active_requests.html" class="nav-link logged-in-only">Find Requests</a>
+                <a href="donation_centers.html" class="nav-link">Centers</a>
+                <a href="#" class="nav-link logged-in-only" id="logoutNavLink">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow py-8">
+        <div class="container">
+            <!-- Message Box for displaying success/error messages -->
+            <div id="messageBox" class="message-box hidden"></div>
+
+            <!-- Donor Profile Section -->
+            <section id="donor-profile-section">
+                <h2 class="section-title">Your Donor Profile</h2>
+                <div class="card max-w-2xl mx-auto">
+                    <form id="donorProfileForm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label for="donorName">Full Name</label>
+                                <input type="text" id="donorName" name="name" placeholder="Zobaer" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="donorBloodGroup">Blood Group</label>
+                                <select id="donorBloodGroup" name="blood_group" required>
+                                    <option value="">Select Blood Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="donorAge">Age</label>
+                                <input type="number" id="donorAge" name="age" placeholder="e.g., 30" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="donorGender">Gender</label>
+                                <select id="donorGender" name="gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group md:col-span-2">
+                                <label for="donorLocation">Location (City, State)</label>
+                                <input type="text" id="donorLocation" name="location"
+                                    placeholder="e.g.,Bangladesh" required>
+                            </div>
+                            <div class="form-group md:col-span-2">
+                                <label for="donorHealthStatus">Health Status (Basic eligibility questions)</label>
+                                <textarea id="donorHealthStatus" name="health_status" rows="3"
+                                    placeholder="Do you have any chronic diseases? Have you traveled recently?"></textarea>
+                            </div>
+                            <div class="form-group md:col-span-2">
+                                <label for="lastDonationDate">Last Donation Date</label>
+                                <input type="date" id="lastDonationDate" name="last_donation_date">
+                            </div>
+                            <div class="form-group md:col-span-2 flex items-center gap-2">
+                                <input type="checkbox" id="donationAvailability" name="donation_availability"
+                                    class="w-auto">
+                                <label for="donationAvailability">Available for Donation</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary w-full mt-6">Save Profile</button>
+                    </form>
+                    <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                        <h4 class="text-lg font-semibold text-blue-800">Your Volunteering Badges:</h4>
+                        <ul class="list-disc list-inside text-gray-700">
+                            <li>First Time Donor (Placeholder)</li>
+                            <li>Life Saver (Placeholder)</li>
+                            <!-- Badges would be dynamically loaded from the database based on donation history -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-8">
+        <div class="container text-center">
+            <p>&copy; 2025 BloodLink. All rights reserved.</p>
+            <p class="text-sm mt-2">Saving lives, one donation at a time.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Global state variables
+        let isLoggedIn = false;
+        let currentUser = null;
+        let sessionCheckInterval = null;
+        const messageBox = document.getElementById('messageBox');
+
+        // Function to display messages
+        function showMessage(message, type = 'success') {
+            messageBox.textContent = message;
+            messageBox.className = `message-box ${type}`;
+            messageBox.classList.remove('hidden');
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 5000); // Hide after 5 seconds
+        }
+
+        // Function to check login status and redirect if not logged in
+        async function checkLoginStatus() {
+            try {
+                const response = await fetch('backend/check_login_status.php');
+                const data = await response.json();
+                
+                if (data.loggedIn) {
+                    isLoggedIn = true;
+                    currentUser = data.user;
+                    updateHeaderNav(true);
+                    // If user is logged in and is a donor, pre-fill the form
+                    if (currentUser.isDonor) {
+                        populateDonorForm(currentUser);
+                    } else {
+                        // If not a donor, ensure form is empty for new entry
+                        document.getElementById('donorProfileForm').reset();
+                    }
+                } else {
+                    // Not logged in, redirect to login page
+                    window.location.href = 'index.html'; 
+                }
+            } catch (error) {
+                console.error('Error checking login status:', error);
+                showMessage('Network error or server misconfiguration. Please try again.', 'error');
+                window.location.href = 'index.html'; // Redirect on critical error
+            }
+        }
+
+        // Function to populate the donor form fields with existing data
+        function populateDonorForm(userData) {
+            if (userData.isDonor) {
+                document.getElementById('donorName').value = userData.name || '';
+                document.getElementById('donorBloodGroup').value = userData.blood_group || '';
+                document.getElementById('donorAge').value = userData.age || '';
+                document.getElementById('donorGender').value = userData.gender || '';
+                document.getElementById('donorLocation').value = userData.location || '';
+                document.getElementById('donorHealthStatus').value = userData.health_status || '';
+                document.getElementById('lastDonationDate').value = userData.last_donation_date || '';
+                document.getElementById('donationAvailability').checked = userData.donation_availability == 1;
+            }
+        }
+
+        // Function to update header navigation based on login state
+        function updateHeaderNav(loggedIn) {
+            const loggedInElements = document.querySelectorAll('.logged-in-only');
+            const loggedOutElements = document.querySelectorAll('.logged-out-only');
+            
+            if (loggedIn) {
+                loggedInElements.forEach(el => el.classList.remove('hidden'));
+                loggedOutElements.forEach(el => el.classList.add('hidden'));
+            } else {
+                loggedInElements.forEach(el => el.classList.add('hidden'));
+                loggedOutElements.forEach(el => el.classList.remove('hidden'));
+            }
+        }
+
+        // Function to handle logout
+        async function handleLogout() {
+            try {
+                const response = await fetch('backend/logout.php', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    isLoggedIn = false;
+                    currentUser = null;
+                    updateHeaderNav(false);
+                    showMessage('Logged out successfully', 'success');
+                    window.location.href = 'index.html'; // Redirect to home/login page
+                } else {
+                    showMessage('Logout failed: ' + (data.message || 'Unknown error.'), 'error');
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                showMessage('Error during logout. Please try again.', 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial check for login status and populate form if donor
+            checkLoginStatus();
+            // Start periodic check for login status every 5 minutes
+            sessionCheckInterval = setInterval(checkLoginStatus, 300000); 
+
+            // Logout button event listener
+            const logoutNavLink = document.getElementById('logoutNavLink');
+            if (logoutNavLink) {
+                logoutNavLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    handleLogout();
+                });
+            }
+
+            // Handle donor profile form submission
+            document.getElementById('donorProfileForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const form = e.target;
+                const submitButton = form.querySelector('button[type="submit"]');
+                if (submitButton) submitButton.disabled = true;
+
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                data.donation_availability = document.getElementById('donationAvailability').checked ? 1 : 0; // Convert boolean to 1 or 0 for PHP
+
+                // Add user_id to data for backend
+                if (currentUser && currentUser.id) {
+                    data.user_id = currentUser.id;
+                } else {
+                    showMessage('User not logged in. Cannot save donor profile.', 'error');
+                    if (submitButton) submitButton.disabled = false;
+                    return;
+                }
+
+                console.log('Saving donor profile with data:', data);
+
+                try {
+                    const response = await fetch('backend/save_donor_profile.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await response.json();
+                    console.log('Save donor profile response:', result);
+
+                    if (result.success) {
+                        showMessage('Donor profile saved successfully!', 'success');
+                        // Update currentUser and header nav after successful save
+                        currentUser.isDonor = true; // Mark as donor if they just created it
+                        currentUser.blood_group = data.blood_group;
+                        currentUser.location = data.location;
+                        currentUser.age = data.age;
+                        currentUser.gender = data.gender;
+                        currentUser.health_status = data.health_status;
+                        currentUser.last_donation_date = data.last_donation_date;
+                        currentUser.donation_availability = data.donation_availability;
+
+                        updateHeaderNav(true); // Re-evaluate nav links (e.g., show donor-only links if any)
+                        
+                        // Redirect back to user profile after saving
+                        window.location.href = 'user_profile.html';
+                    } else {
+                        showMessage('Failed to save donor profile: ' + result.message, 'error');
+                    }
+                } catch (error) {
+                    console.error('Error saving donor profile:', error);
+                    showMessage('An error occurred while saving profile. Please try again.', 'error');
+                } finally {
+                    if (submitButton) submitButton.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

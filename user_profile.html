@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodLink Management - My Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for consistency and aesthetics, complementing Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe3e3 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(45deg, #ef4444, #b91c1c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(239, 68, 68, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ef4444, #dc2626);
+            color: white !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #dc2626, #b91c1c);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #fee2e2, #fecaca);
+            color: #991b1b !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid #fecaca;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(45deg, #fecaca, #fca5a5);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.2);
+        }
+
+        header {
+            background: linear-gradient(to right, #fff5f5, #fee2e2) !important;
+            border-bottom: 3px solid #ef4444;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .nav-link:hover {
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+
+        .nav-link.active {
+            background-color: #ef4444;
+            color: #ffffff;
+        }
+
+        .nav-link.active:hover {
+            background-color: #dc2626;
+            color: #ffffff;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+
+        footer {
+            background: linear-gradient(to right, #991b1b, #7f1d1d) !important;
+        }
+
+        .message-box {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .message-box.success {
+            background-color: #d1fae5;
+            /* green-100 */
+            color: #065f46;
+            /* green-800 */
+            border: 1px solid #34d399;
+            /* green-400 */
+        }
+
+        .message-box.error {
+            background-color: #fee2e2;
+            /* red-100 */
+            color: #991b1b;
+            /* red-800 */
+            border: 1px solid #ef4444;
+            /* red-500 */
+        }
+
+        .message-box.info {
+            background-color: #e0f2fe;
+            /* blue-100 */
+            color: #1e40af;
+            /* blue-800 */
+            border: 1px solid #60a5fa;
+            /* blue-400 */
+        }
+
+        .message-box.warning {
+            background-color: #fffbeb;
+            /* yellow-100 */
+            color: #92400e;
+            /* yellow-800 */
+            border: 1px solid #fcd34d;
+            /* yellow-400 */
+        }
+
+        /* Profile specific styles */
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #ef4444;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New style for smaller buttons in the request card */
+        .btn-action-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            /* text-sm */
+            font-weight: 500;
+            /* font-medium */
+            border-radius: 0.375rem;
+            /* rounded-md */
+        }
+    </style>
+</head>
+
+<body>
+    <header class="bg-white shadow-md py-4">
+        <div class="container flex flex-col md:flex-row justify-between items-center">
+            <h1 class="text-3xl font-bold text-red-600 mb-4 md:mb-0">BloodLink Management</h1>
+            <nav class="flex flex-wrap gap-2 md:gap-4 text-gray-700 font-medium">
+                <a href="index.html" class="nav-link logged-out-only">Home</a>
+                <a href="index.html" class="nav-link logged-out-only hidden">Login</a>
+                <a href="user_profile.html" class="nav-link logged-in-only active">My Profile</a>
+                <a href="request_form.html" class="nav-link logged-in-only">Request Blood</a>
+                <a href="search_donors.html" class="nav-link logged-in-only">Find Donors</a>
+                <a href="find_active_requests.html" class="nav-link logged-in-only">Find Requests</a>
+                <a href="donation_centers.html" class="nav-link">Centers</a>
+                <a href="#" class="nav-link logged-in-only" id="logoutNavLink">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow py-8">
+        <div class="container">
+            <div id="messageBox" class="message-box hidden"></div>
+
+            <section id="user-profile-section">
+                <h2 class="section-title">My Profile</h2>
+                <div class="card max-w-3xl mx-auto">
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
+                        <img id="profilePicture" src="85922214.jpg" alt="Profile Picture" class="profile-picture">
+                        <div class="text-center md:text-left flex-grow">
+                            <h3 class="text-3xl font-bold text-gray-800 mb-1" id="userProfileName">Loading Name...</h3>
+                            <p class="text-lg text-gray-600 mb-2" id="userProfileEmail">Loading Email...</p>
+                            <p class="text-md text-gray-500 mb-4">Role: <span id="userProfileRole">Loading
+                                        Role...</span></p>
+
+                            <button id="editProfileButton" class="btn-secondary text-sm">Update Profile</button>
+                        </div>
+                    </div>
+
+                    <hr class="my-6 border-gray-200">
+
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-4">Donor Status</h4>
+                        <div id="becomeDonorSection" class="text-center p-6 bg-red-50 rounded-lg hidden">
+                            <p class="text-gray-700 mb-4">You are not yet registered as a blood donor. Become a
+                                lifesaver today!</p>
+                            <a href="donor_form.html" class="btn-primary">Become a Donor</a>
+                        </div>
+                        <div id="donorInfoDisplay" class="space-y-4 hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="font-medium text-gray-700">Blood Group:</p>
+                                    <p class="text-gray-900 font-semibold" id="donorBloodGroupDisplay">N/A</p>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-700">Location:</p>
+                                    <p class="text-gray-900" id="donorLocationDisplay">N/A</p>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-700">Age:</p>
+                                    <p class="text-gray-900" id="donorAgeDisplay">N/A</p>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-700">Gender:</p>
+                                    <p class="text-gray-900" id="donorGenderDisplay">N/A</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p class="font-medium text-gray-700">Health Status:</p>
+                                    <p class="text-gray-900" id="donorHealthStatusDisplay">N/A</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p class="font-medium text-gray-700">Last Donation Date:</p>
+                                    <p class="text-gray-900" id="donorLastDonationDateDisplay">N/A</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-4 mt-4">
+                                <a href="donor_form.html" class="btn-secondary text-center">Edit Donor Profile</a>
+                                <div class="flex items-center">
+                                    <span id="donorAvailabilityStatus"
+                                        class="inline-block px-3 py-1 rounded-full text-sm font-semibold"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-6 border-gray-200">
+
+                    <div>
+                        <h4 class="text-xl font-semibold text-gray-800 mb-4">Your Active Blood Requests (Manage)</h4>
+                        <div id="bloodRequestHistory" class="space-y-4">
+                            <p class="text-gray-600 text-center">Loading active requests...</p>
+                        </div>
+                        <a href="request_form.html" class="btn-primary w-full mt-6">Submit New Blood Request</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-8">
+        <div class="container text-center">
+            <p>&copy; 2025 BloodLink Management. All rights reserved.</p>
+            <p class="text-sm mt-2">Saving lives, one donation at a time.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Global state variables
+        let isLoggedIn = false;
+        let currentUser = null;
+        let sessionCheckInterval = null;
+        const messageBox = document.getElementById('messageBox');
+
+        // Function to display messages
+        function showMessage(message, type = 'success') {
+            messageBox.textContent = message;
+            messageBox.className = `message-box ${type}`;
+            messageBox.classList.remove('hidden');
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 5000); // Hide after 5 seconds
+        }
+
+        // Function to check login status and populate profile
+        async function checkLoginStatusAndPopulateProfile() {
+            try {
+                const response = await fetch('backend/check_login_status.php');
+                const data = await response.json();
+
+                if (data.loggedIn) {
+                    isLoggedIn = true;
+                    currentUser = data.user;
+                    updateHeaderNav(true); // Update header navigation for logged-in state
+                    populateUserProfile(data.user); // Populate the profile details
+
+                    // Call the new function to fetch active requests if the user is a recipient
+                   fetchAndPopulateRecipientRequests();
+                } else {
+                    // If not logged in, redirect to the home/login page
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                console.error('Error checking login status:', error);
+                showMessage('Network error or server misconfiguration. Please try again.', 'error');
+                // Redirect to login page on critical error
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Function to update header navigation based on login state
+        function updateHeaderNav(loggedIn) {
+            const loggedInElements = document.querySelectorAll('.logged-in-only');
+            const loggedOutElements = document.querySelectorAll('.logged-out-only');
+
+            if (loggedIn) {
+                loggedInElements.forEach(el => el.classList.remove('hidden'));
+                loggedOutElements.forEach(el => el.classList.add('hidden'));
+            } else {
+                loggedInElements.forEach(el => el.classList.add('hidden'));
+                loggedOutElements.forEach(el => el.classList.remove('hidden'));
+            }
+        }
+
+        // Function to handle logout
+        async function handleLogout() {
+            try {
+                const response = await fetch('backend/logout.php', {
+                    method: 'POST',
+                    credentials: 'include' // Important for sending session cookies
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    isLoggedIn = false;
+                    currentUser = null;
+                    updateHeaderNav(false);
+                    showMessage('Logged out successfully', 'success');
+                    window.location.href = 'index.html'; // Redirect to home/login page
+                } else {
+                    showMessage('Logout failed: ' + (data.message || 'Unknown error.'), 'error');
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                showMessage('Error during logout. Please try again.', 'error');
+            }
+        }
+
+        // Function to populate user profile UI with fetched data
+        function populateUserProfile(userData) {
+            // Clear any previous messages when profile is populated
+            showMessage('', 'hidden');
+
+            document.getElementById('userProfileName').textContent = userData.name || 'N/A';
+            document.getElementById('userProfileEmail').textContent = userData.email || 'N/A';
+            document.getElementById('userProfileRole').textContent = userData.role ? userData.role.charAt(0).toUpperCase() + userData.role.slice(1) : 'N/A';
+
+            // Placeholder for profile picture (can be updated later with actual image upload)
+            const profilePicture = document.getElementById('profilePicture');
+            // If you have a user-specific profile picture URL in userData, use it here:
+
+
+            const becomeDonorSection = document.getElementById('becomeDonorSection');
+            const donorInfoDisplay = document.getElementById('donorInfoDisplay');
+
+            if (userData.isDonor) {
+                becomeDonorSection.classList.add('hidden');
+                donorInfoDisplay.classList.remove('hidden');
+
+                document.getElementById('donorBloodGroupDisplay').textContent = userData.blood_group || 'N/A';
+                document.getElementById('donorLocationDisplay').textContent = userData.location || 'N/A';
+                document.getElementById('donorAgeDisplay').textContent = userData.age || 'N/A';
+                document.getElementById('donorGenderDisplay').textContent = userData.gender ? userData.gender.charAt(0).toUpperCase() + userData.gender.slice(1) : 'N/A';
+                document.getElementById('donorHealthStatusDisplay').textContent = userData.health_status || 'N/A';
+                document.getElementById('donorLastDonationDateDisplay').textContent = userData.last_donation_date || 'No donations yet';
+
+                const availabilityStatusSpan = document.getElementById('donorAvailabilityStatus');
+                if (userData.donation_availability) {
+                    availabilityStatusSpan.textContent = 'Available for Donation';
+                    availabilityStatusSpan.className = 'inline-block px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800';
+                } else {
+                    availabilityStatusSpan.textContent = 'Not Available for Donation';
+                    availabilityStatusSpan.className = 'inline-block px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-800';
+                }
+
+            } else {
+                becomeDonorSection.classList.remove('hidden');
+                donorInfoDisplay.classList.add('hidden');
+            }
+        }
+        
+        //  Fetch and display the user's active blood requests
+        async function fetchAndPopulateRecipientRequests() {
+            const bloodRequestHistoryDiv = document.getElementById('bloodRequestHistory');
+            // Show a specific loading message for requests
+            bloodRequestHistoryDiv.innerHTML = '<p class="text-gray-600 text-center">Fetching your active requests...</p>';
+
+            try {
+                // Assuming 'fetch_recipient_requests.php' is your new backend file
+                const response = await fetch('backend/fetch_recipient_requests.php', {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+
+                bloodRequestHistoryDiv.innerHTML = ''; // Clear loading message
+
+                if (data.success && data.requests && data.requests.length > 0) {
+                    data.requests.forEach(request => {
+                        const requestCard = document.createElement('div');
+                        requestCard.className = 'p-4 border border-red-200 rounded-lg bg-white shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center';
+
+                        const urgencyClass = request.urgency_level && request.urgency_level.toLowerCase() === 'emergency' ? 'text-red-500 font-bold' : 'text-orange-500 font-semibold';
+
+                        requestCard.innerHTML = `
+                            <div class="mb-4 sm:mb-0">
+                                <p class="text-lg font-semibold text-gray-800">${request.blood_type} (${request.units_required} units)</p>
+                                <p class="text-sm text-gray-700">Location: ${request.hospital_location || 'N/A'}</p>
+                                <p class="text-sm ${urgencyClass}">Urgency: ${request.urgency_level ? request.urgency_level.charAt(0).toUpperCase() + request.urgency_level.slice(1) : 'N/A'}</p>
+                                <p class="text-xs text-gray-500 mt-1">Requested on: ${new Date(request.request_date).toLocaleDateString()}</p>
+                            </div>
+                            <div class="flex gap-3">
+                                <button data-request-id="${request.request_id}" data-status="Found" 
+                                    class="btn-action-sm btn-primary bg-green-600 hover:bg-green-700 found-btn">
+                                    Found
+                                </button>
+                                <button data-request-id="${request.request_id}" data-status="Terminated" 
+                                    class="btn-action-sm btn-secondary terminate-btn">
+                                    Terminate
+                                </button>
+                            </div>
+                        `;
+                        bloodRequestHistoryDiv.appendChild(requestCard);
+                    });
+
+                    // Add event listeners to the new action buttons
+                    bloodRequestHistoryDiv.querySelectorAll('.found-btn, .terminate-btn').forEach(button => {
+                        button.addEventListener('click', handleRequestStatusUpdate);
+                    });
+
+                } else {
+                    bloodRequestHistoryDiv.innerHTML = '<p class="text-gray-600 text-center p-4 bg-red-50 border border-red-200 rounded-lg">No active blood requests found at this time.</p>';
+                }
+
+            } catch (error) {
+                console.error('Error fetching recipient requests:', error);
+                bloodRequestHistoryDiv.innerHTML = '<p class="text-gray-600 text-center text-red-500">Could not load your active requests due to a network error.</p>';
+            }
+        }
+
+        // ⭐ NEW FUNCTION: Handle the status update (Found/Terminate)
+        async function handleRequestStatusUpdate(e) {
+            const button = e.target;
+            const requestId = button.getAttribute('data-request-id');
+            const newStatus = button.getAttribute('data-status');
+            const originalText = button.textContent;
+            
+            // Define confirm message based on action
+            let confirmMessage = newStatus === 'Found' 
+                ? `Confirm that you have SUCCESSFULLY received the blood for Request ${requestId}. This will close the request.`
+                : `Are you sure you want to CANCEL (Terminate) Request ${requestId}?`;
+
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+
+            // Disable buttons and show loading state
+            button.disabled = true;
+            button.textContent = '...';
+            
+            // Temporarily disable all action buttons on the card to prevent multiple clicks
+            button.closest('.flex.gap-3').querySelectorAll('button').forEach(btn => btn.disabled = true);
+
+            try {
+                // Assuming 'update_request_status.php' is your new backend file
+                const response = await fetch('backend/update_request_status.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ request_id: requestId, status: newStatus }),
+                    credentials: 'include'
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    // Refresh the request list to show the request is gone
+                    fetchAndPopulateRecipientRequests();
+                } else {
+                    showMessage('Update failed: ' + (data.message || 'Unknown error.'), 'error');
+                    // Restore button state
+                    button.disabled = false;
+                    button.textContent = originalText;
+                    button.closest('.flex.gap-3').querySelectorAll('button').forEach(btn => btn.disabled = false);
+                }
+
+            } catch (error) {
+                console.error('Update status error:', error);
+                showMessage('Network error during status update. Please try again.', 'error');
+                // Restore button state
+                button.disabled = false;
+                button.textContent = originalText;
+                button.closest('.flex.gap-3').querySelectorAll('button').forEach(btn => btn.disabled = false);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial check for login status and populate profile
+            checkLoginStatusAndPopulateProfile();
+            // Start periodic check for login status every 5 minutes
+            sessionCheckInterval = setInterval(checkLoginStatusAndPopulateProfile, 300000);
+
+            // Logout button event listener
+            const logoutNavLink = document.getElementById('logoutNavLink');
+            if (logoutNavLink) {
+                logoutNavLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    handleLogout();
+                });
+            }
+
+            // Edit Profile Button (placeholder for now, could open a modal or redirect to edit page)
+            const editProfileButton = document.getElementById('editProfileButton');
+            if (editProfileButton) {
+                editProfileButton.addEventListener('click', () => {
+                    showMessage('Update Profile functionality is a placeholder. You can edit donor profile via "Edit Donor Profile" button.', 'info');
+                    // In a more complex app, this might open a modal or redirect to a general user edit page
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

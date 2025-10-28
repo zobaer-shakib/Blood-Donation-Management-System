@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodLink - Find Donors</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for consistency and aesthetics, complementing Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe3e3 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(45deg, #ef4444, #b91c1c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(239, 68, 68, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ef4444, #dc2626);
+            color: white !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #dc2626, #b91c1c);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #fee2e2, #fecaca);
+            color: #991b1b !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid #fecaca;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(45deg, #fecaca, #fca5a5);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.2);
+        }
+
+        header {
+            background: linear-gradient(to right, #fff5f5, #fee2e2) !important;
+            border-bottom: 3px solid #ef4444;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .nav-link:hover {
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+
+        .nav-link.active {
+            background-color: #ef4444;
+            color: #ffffff;
+        }
+
+        .nav-link.active:hover {
+            background-color: #dc2626;
+            color: #ffffff;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+
+        footer {
+            background: linear-gradient(to right, #991b1b, #7f1d1d) !important;
+        }
+
+        .message-box {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .message-box.success {
+            background-color: #d1fae5;
+            /* green-100 */
+            color: #065f46;
+            /* green-800 */
+            border: 1px solid #34d399;
+            /* green-400 */
+        }
+
+        .message-box.error {
+            background-color: #fee2e2;
+            /* red-100 */
+            color: #991b1b;
+            /* red-800 */
+            border: 1px solid #ef4444;
+            /* red-500 */
+        }
+
+        .message-box.info {
+            background-color: #e0f2fe;
+            /* blue-100 */
+            color: #1e40af;
+            /* blue-800 */
+            border: 1px solid #60a5fa;
+            /* blue-400 */
+        }
+
+        .message-box.warning {
+            background-color: #fffbeb;
+            /* yellow-100 */
+            color: #92400e;
+            /* yellow-800 */
+            border: 1px solid #fcd34d;
+            /* yellow-400 */
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            /* mb-5 */
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            /* text-sm */
+            font-weight: 500;
+            /* font-medium */
+            color: #374151;
+            /* text-gray-700 */
+            margin-bottom: 0.5rem;
+            /* mb-2 */
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"],
+        .form-group input[type="number"],
+        .form-group input[type="tel"],
+        .form-group input[type="date"],
+        .form-group select,
+        .form-group textarea {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            /* px-4 py-3 */
+            border: 1px solid #d1d5db;
+            /* border-gray-300 */
+            border-radius: 0.5rem;
+            /* rounded-lg */
+            font-size: 1rem;
+            /* text-base */
+            color: #374151;
+            /* text-gray-700 */
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="bg-white shadow-md py-4">
+        <div class="container flex flex-col md:flex-row justify-between items-center">
+            <h1 class="text-3xl font-bold text-red-600 mb-4 md:mb-0">BloodLink</h1>
+            <nav class="flex flex-wrap gap-2 md:gap-4 text-gray-700 font-medium">
+                <a href="index.html" class="nav-link logged-out-only">Home</a>
+                <a href="index.html" class="nav-link logged-out-only hidden">Login</a>
+                <a href="user_profile.html" class="nav-link logged-in-only">My Profile</a>
+                <a href="request_form.html" class="nav-link logged-in-only">Request Blood</a>
+                <a href="search_donors.html" class="nav-link logged-in-only active">Find Donors</a>
+                <a href="find_active_requests.html" class="nav-link logged-in-only">Find Requests</a>
+                <a href="donation_centers.html" class="nav-link">Centers</a>
+                <a href="#" class="nav-link logged-in-only" id="logoutNavLink">Logout</a>
+
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow py-8">
+        <div class="container">
+            <!-- Message Box for displaying success/error messages -->
+            <div id="messageBox" class="message-box hidden"></div>
+
+            <!-- Search Donors Section -->
+            <section id="search-donors-section">
+                <h2 class="section-title">Find Available Donors</h2>
+                <div class="card max-w-2xl mx-auto">
+                    <form id="donorSearchForm">
+                        <div class="form-group">
+                            <label for="searchBloodGroup">Blood Group</label>
+                            <select id="searchBloodGroup" name="blood_group">
+                                <option value="">Any</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="searchLocation">Location (City)</label>
+                            <input type="text" id="searchLocation" name="location" placeholder="e.g., dhaka">
+                        </div>
+                        <div class="form-group">
+                            <label for="searchLastDonationDate">Last Donation Date (After)</label>
+                            <input type="date" id="searchLastDonationDate" name="last_donation_date">
+                        </div>
+                        <button type="submit" class="btn-primary w-full mt-4">Search Donors</button>
+                    </form>
+
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Matching Donors:</h3>
+                        <div id="donorResults" class="space-y-4">
+                            <p class="text-center text-gray-600">Enter search criteria and click "Search Donors" to find
+                                matches.</p>
+                            <!-- Search results would be dynamically loaded here -->
+                            <p class="text-sm text-gray-500 mt-4">
+                                (Smart matching based on location and availability would be handled by the backend.)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-8">
+        <div class="container text-center">
+            <p>&copy; 2025 BloodLink. All rights reserved.</p>
+            <p class="text-sm mt-2">Saving lives, one donation at a time.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Global state variables
+        let isLoggedIn = false;
+        let currentUser = null;
+        let sessionCheckInterval = null;
+        const messageBox = document.getElementById('messageBox');
+
+        // Function to display messages
+        function showMessage(message, type = 'success') {
+            messageBox.textContent = message;
+            messageBox.className = `message-box ${type}`;
+            messageBox.classList.remove('hidden');
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 5000); // Hide after 5 seconds
+        }
+
+        // Function to check login status and redirect if not logged in
+        async function checkLoginStatus() {
+            try {
+                const response = await fetch('backend/check_login_status.php');
+                const data = await response.json();
+
+                if (data.loggedIn) {
+                    isLoggedIn = true;
+                    currentUser = data.user;
+                    updateHeaderNav(true);
+                } else {
+                    // Not logged in, redirect to login page
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                console.error('Error checking login status:', error);
+                showMessage('Network error or server misconfiguration. Please try again.', 'error');
+                window.location.href = 'index.html'; // Redirect on critical error
+            }
+        }
+
+        // Function to update header navigation based on login state
+        function updateHeaderNav(loggedIn) {
+            const loggedInElements = document.querySelectorAll('.logged-in-only');
+            const loggedOutElements = document.querySelectorAll('.logged-out-only');
+
+            if (loggedIn) {
+                loggedInElements.forEach(el => el.classList.remove('hidden'));
+                loggedOutElements.forEach(el => el.classList.add('hidden'));
+            } else {
+                loggedInElements.forEach(el => el.classList.add('hidden'));
+                loggedOutElements.forEach(el => el.classList.remove('hidden'));
+            }
+        }
+
+        // Function to handle logout
+        async function handleLogout() {
+            try {
+                const response = await fetch('backend/logout.php', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    isLoggedIn = false;
+                    currentUser = null;
+                    updateHeaderNav(false);
+                    showMessage('Logged out successfully', 'success');
+                    window.location.href = 'index.html'; // Redirect to home/login page
+                } else {
+                    showMessage('Logout failed: ' + (data.message || 'Unknown error.'), 'error');
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                showMessage('Error during logout. Please try again.', 'error');
+            }
+        }
+
+        // Function to initiate contact (called from donor search results)
+        async function initiateContact(donorId) {
+            console.log('Initiating contact for donor ID:', donorId);
+            if (!isLoggedIn) {
+                showMessage('You must be logged in to contact a donor.', 'error');
+                window.location.href = 'index.html'; // Redirect to login
+                return;
+            }
+
+            try {
+                const response = await fetch('backend/initiate_contact.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ donor_id: donorId, recipient_id: currentUser.id }) // Send both IDs
+                });
+                const result = await response.json();
+                console.log('Contact request response:', result);
+
+                if (result.success) {
+                    const confirmationMessage = `Contact request sent to donor at ${result.donor_email}. The donor will be notified.`;
+                    showMessage(confirmationMessage, 'success');
+                } else {
+                    showMessage('Failed to send contact request: ' + result.message, 'error');
+                }
+
+            } catch (error) {
+                console.error('Error initiating contact:', error);
+                showMessage('An error occurred while sending contact request. Please try again.', 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial check for login status
+            checkLoginStatus();
+            // Start periodic check for login status every 5 minutes
+            sessionCheckInterval = setInterval(checkLoginStatus, 300000);
+
+            // Logout button event listener
+            const logoutNavLink = document.getElementById('logoutNavLink');
+            if (logoutNavLink) {
+                logoutNavLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    handleLogout();
+                });
+            }
+
+            // Handle donor search form submission
+            document.getElementById('donorSearchForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const form = e.target;
+                const submitButton = form.querySelector('button[type="submit"]');
+                if (submitButton) submitButton.disabled = true;
+
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                console.log('Searching donors with criteria:', data);
+
+                try {
+                    const response = await fetch(`backend/search_donors.php?${new URLSearchParams(data).toString()}`);
+                    const result = await response.json();
+                    const donorResultsDiv = document.getElementById('donorResults');
+                    donorResultsDiv.innerHTML = ''; // Clear previous results
+
+                    if (result.success && result.donors.length > 0) {
+                        result.donors.forEach(donor => {
+                            // Conditionally render the contact button based on the *current* isLoggedIn state
+                            const contactButton = isLoggedIn ? `<button class="btn-primary text-sm contact-donor-btn" data-user-id="${donor.user_id}">Contact</button>` : '';
+
+                            const donorCard = `
+                                <div class="p-4 border border-gray-200 rounded-lg bg-gray-50 flex flex-col sm:flex-row justify-between items-center mb-2">
+                                    <div class="text-center sm:text-left mb-2 sm:mb-0">
+                                        <p class="font-semibold text-lg">${donor.name || 'N/A'} (${donor.blood_group || 'N/A'})</p>
+                                        <p class="text-sm text-gray-600">Location: ${donor.location || 'N/A'}</p>
+                                        <p class="text-sm text-gray-600">Last Donation: ${donor.last_donation_date || 'N/A'}</p>
+                                    </div>
+                                    ${contactButton}
+                                </div>
+                            `;
+                            donorResultsDiv.insertAdjacentHTML('beforeend', donorCard);
+                        });
+
+                        showMessage(`Found ${result.donors.length} matching donor(s).`, 'success');
+
+                        // Attach a click event listener only if the buttons were rendered
+                        if (isLoggedIn) {
+                            document.querySelectorAll('.contact-donor-btn').forEach(button => {
+                                button.addEventListener('click', (event) => {
+                                    const donorId = event.target.dataset.userId;
+                                    initiateContact(donorId);
+                                });
+                            });
+                        }
+                    } else {
+                        donorResultsDiv.innerHTML = '<p class="text-center text-gray-600">No matching donors found.</p>';
+                        showMessage('No matching donors found.', 'info');
+                    }
+                } catch (error) {
+                    console.error('Error searching donors:', error);
+                    showMessage('An error occurred during donor search. Please try again.', 'error');
+                } finally {
+                    if (submitButton) submitButton.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
